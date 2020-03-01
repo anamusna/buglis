@@ -11,31 +11,36 @@ import {
 	AsyncStorage
 } from 'react-native';
 import { Card, CardItem, Body, Header } from 'native-base';
+
 /* import { Card } from 'react-native-paper'; */
 
 export default class PostCard extends React.Component {
 	render() {
+		console.log('CARD', this.props);
 		return (
 			<TouchableWithoutFeedback
 			/* onPress={() => this.props.navigation.navigate('Profile', { id: post._id })} */
 			>
-				<Card style={{ marginTop: 10 }}>
+				<Card style={{ marginTop: 10, marginBottom: 10 }}>
 					<CardItem cardBody>
 						<View>
-							<Image source={require('../../assets/bug.jpg')} style={{ width: 350, height: 300 }} />
+							<Image
+								source={{ uri: this.props.post.image }} /* require('../../assets/bug.jpg') */
+								style={{ width: 350, height: 300 }}
+							/>
 						</View>
 					</CardItem>
 					<CardItem>
-						<Body style={{ justifyContent: 'center', alignItems: 'center' }}>
-							<Text style={{ fontSize: 24, fontWeight: 'bold' }}>{this.props.event.title}</Text>
+						<Body /* style={{ justifyContent: 'center', alignItems: 'center' }} */>
+							<Text style={{ fontSize: 20, fontWeight: 'bold' }}>{this.props.post.title}</Text>
 
 							<View style={{ flexDirection: 'row' }}>
 								<View style={{ paddingRight: 2, marginRight: 2 }}>
-									<Text style={styles.servicesList}>{this.props.event.director}</Text>
-									<Text style={styles.servicesList}>{this.props.event.description}</Text>
-									<Text style={styles.servicesList}>{this.props.event.genre}</Text>
-									<Text onClick={() => this.props.removeEvent(this.props.event._id)}>Delete</Text>
-									<Text style={styles.servicesList}>{this.props.event.updated_at}</Text>
+									<Text>{this.props.post.director}</Text>
+									<Text>{this.props.post.description}</Text>
+									<Text>{this.props.post.genre}</Text>
+									<Text onClick={() => this.props.removeEvent(this.props.post._id)}>Delete</Text>
+									<Text>{this.props.post.updated_at}</Text>
 								</View>
 							</View>
 						</Body>

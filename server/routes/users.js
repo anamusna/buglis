@@ -4,23 +4,23 @@ const router = express.Router();
 
 const cors = require('cors');
 
-const eventController = require('../controllers/EventsController.js');
+const postController = require('../controllers/PostsController.js');
 const upload = require('../handlers/multer');
 
-//get a list of events
-router.get('/events/list', cors(), eventController.list);
+//get a list of posts
+router.get('/posts/list', cors(), postController.list);
 
-//add a new events to DB
-router.post('/events/new', upload.single('image'), cors(), eventController.save);
+//add a new posts to DB
+router.post('/posts/new', upload.single('image'), cors(), postController.save);
 
-//show a event
-router.get('/events/:id', cors(), eventController.show);
+//show a post
+router.get('/posts/:id', cors(), postController.show);
 
-//update a events in the DB
+//update a posts in the DB
 
-router.put('/events/', cors(), eventController.update);
+router.put('/posts/', cors(), postController.update);
 
-//delete a event in the DB
-router.delete('/events/', cors(), eventController.delete);
+//delete a post in the DB
+router.delete('/posts/', cors(), postController.delete);
 
 module.exports = router;

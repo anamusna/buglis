@@ -9,7 +9,7 @@ function HomeScreen({ navigation }) {
 			<ScrollView>
 				<Text>Home page</Text>
 				<Posts />
-				<TouchableHighlight>
+				<TouchableHighlight style={{ marginBottom: 10 }}>
 					<Button
 						title="Go to Details screen"
 						onPress={() => {
@@ -22,7 +22,7 @@ function HomeScreen({ navigation }) {
 					/>
 				</TouchableHighlight>
 
-				<TouchableHighlight>
+				<TouchableHighlight style={{ marginBottom: 10 }}>
 					<Button title="Report a litter" onPress={() => navigation.navigate('Maps')} />
 				</TouchableHighlight>
 

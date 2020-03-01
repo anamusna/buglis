@@ -1,27 +1,27 @@
 const mongoose = require('mongoose');
-const eventSchema = require('../models/Events');
+const postSchema = require('../models/Posts');
 const SessionSchema = require('../models/SessionSchema');
 const Session = mongoose.model('Session', SessionSchema);
 const uuid = require('uuid');
 
-const Event = mongoose.model('Event', eventSchema);
+const Post = mongoose.model('Post', postSchema);
 
-const eventController = {};
+const postController = {};
 
-//List all events
-eventController.list = (req, res) => {
-	Event.find({}).exec((error, events) => {
+//List all posts
+postController.list = (req, res) => {
+	Post.find({}).exec((error, posts) => {
 		if (error) {
 			console.log('Error:', error);
 		} else {
-			res.send(events);
+			res.send(posts);
 		}
 	});
 };
 
 // create method
 
-eventController.login = (req, res) => {
+postController.login = (req, res) => {
 	let email = req.body.email;
 	let password = req.body.password;
 
@@ -47,44 +47,43 @@ eventController.login = (req, res) => {
 	});
 };
 
-eventController.save = (req, res) => {
-	console.log('yooo', req.body);
+postController.save = (req, res) => {
+	console.log('EVENT CONTROLLER', req.body);
 
-	let event = new Event({
+	let post = new Post({
 		title       : req.body.title,
 		director    : req.body.director,
 		genre       : req.body.genre,
 		description : req.body.description,
-		rating      : req.body.rating
-		/* image       : req.file.path */
+		image       : req.body.image
 	});
 
-	event.save((error) => {
+	post.save((error) => {
 		if (error) {
-			console.log(error);
+			console.log('OOPS', error);
 			res.send(error);
 		} else {
-			console.log('Event was created');
-			res.send(event);
+			console.log('Post was created');
+			res.send(post);
 		}
 	});
 };
 
 //show method
-eventController.show = (req, res) => {
-	Event.findOne({ _id: req.params.id }).exec((error, event) => {
+postController.show = (req, res) => {
+	Post.findOne({ _id: req.params.id }).exec((error, post) => {
 		if (error) {
 			console.log('Error:', error);
 		} else {
-			res.send(event);
+			res.send(post);
 		}
 	});
 };
 
 //update
-eventController.update = (req, res) => {
+postController.update = (req, res) => {
 	console.log('testing console', req.query.id, req.params, req.body);
-	Event.findByIdAndUpdate(
+	Post.findByIdAndUpdate(
 		{ _id: req.query.id },
 		{
 			$set : {
@@ -97,29 +96,29 @@ eventController.update = (req, res) => {
 			}
 		},
 		{ new: true },
-		(error, event) => {
+		(error, post) => {
 			if (error) {
 				console.log(error);
 				res.status(400);
 				res.send({ error: 'None shall pass' });
 			} else {
-				res.send(event);
+				res.send(post);
 			}
 		}
 	);
 };
 
 //delete
-eventController.delete = (req, res) => {
+postController.delete = (req, res) => {
 	console.log('testing console', req.query.id, req.params, req.body);
-	Event.deleteOne({ _id: req.query.id }, (error) => {
+	Post.deleteOne({ _id: req.query.id }, (error) => {
 		if (error) {
 			console.log(error);
 		} else {
-			console.log('event deleted');
-			res.send('events/list');
+			console.log('post deleted');
+			res.send('posts/list');
 		}
 	});
 };
 
-module.exports = eventController;
+module.exports = postController;

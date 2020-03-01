@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 import PostCard from './PostCard';
-import AddPost from './AddPost';
+import AddPosts from './AddPosts';
 import axios from 'axios';
 
 import { StyleSheet, TextInput, Modal, Button, Text, TouchableHighlight, View, Alert } from 'react-native';
@@ -11,29 +11,27 @@ class Posts extends Component {
 		super(props);
 
 		this.state = {
-			events : []
+			posts : []
 		};
 	}
 
 	//get the data
 
 	componentWillMount() {
-		axios.get('http://192.168.178.21:3001/api/events/list').then((results) => {
-			console.log('events result', results);
-
-			this.setState({ events: results.data });
-			console.log('events list', this.state.events);
+		axios.get('http://192.168.178.21:3001/api/posts/list').then((results) => {
+			this.setState({ posts: results.data });
+			console.log('posts list', this.state.posts);
 		});
 	}
-	onAddEventPressed = (value) => {
+	onAddPostPressed = (value) => {
 		this.setState({
-			events : this.state.events.concat(value)
+			posts : this.state.posts.concat(value)
 		});
 	};
 
-	removeEvent = (id) => {
+	removePost = (id) => {
 		console.log(id);
-		axios.delete('http://192.168.178.21:3001/api/events/?id=' + id).then((res) => console.log(res));
+		axios.delete('http://192.168.178.21:3001/api/posts/?id=' + id).then((res) => console.log(res));
 		this.setState({
 			deleted : true
 		});
@@ -41,15 +39,15 @@ class Posts extends Component {
 
 	render() {
 		return (
-			<View>
-				<Text>EVENTS</Text>
+			<View style={{ flex: 1 }}>
 				<View className="genres">
-					<AddPost addEventFunction={(value) => this.onAddEventPressed(value)} />
+					<AddPosts addPostFunction={(value) => this.onAddPostPressed(value)} />
 				</View>
 
-				<View className="all-events-list">
-					{this.state.events.map((event, index) => {
-						return <PostCard event={event} key={index} removeEvent={this.removeEvent} />;
+				<View className="all-posts-list">
+					<Text>POSTS</Text>
+					{this.state.posts.map((post, index) => {
+						return <PostCard post={post} key={index} removePost={this.removePost} />;
 					})}
 				</View>
 			</View>

@@ -1,9 +1,10 @@
 const mongoose = require('mongoose');
-const eventSchema = new mongoose.Schema({
+const postSchema = new mongoose.Schema({
 	title       : {
-		type   : String,
-		unique : true,
-		trim   : true
+		type     : String,
+		required : [ true, 'Title field is required' ],
+		unique   : true,
+		trim     : true
 	},
 	director    : {
 		type : String
@@ -16,13 +17,13 @@ const eventSchema = new mongoose.Schema({
 		trim : true
 	},
 
-	/* 	image       : {
+	image       : {
 		type : Object
-	}, */
+	},
 	updated_at  : {
 		type    : Date,
 		default : Date.now
 	}
 });
 
-module.exports = eventSchema;
+module.exports = postSchema;
