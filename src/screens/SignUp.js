@@ -9,13 +9,12 @@ import {
 	TouchableHighlight,
 	Image,
 	ScrollView,
-	Alert
+	Alert,
+	Button
 } from 'react-native';
-/* import ShowPassword from './ShowPassword';
-import { api } from '../../api/api'; */
-/* import deviceStorage from '../../services/deviceStorage';
- */
-export default class SignUpScreen extends Component {
+import { AntDesign } from '@expo/vector-icons';
+
+class SignUp extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -82,7 +81,7 @@ export default class SignUpScreen extends Component {
 		return (
 			<ScrollView>
 				<View style={styles.container}>
-					<TouchableOpacity onPress={() => this.props.navigation.navigate('Profile')}>
+					<TouchableOpacity /* onPress={() => this.props.navigation.navigate('Profile')} */>
 						<Image
 							style={{
 								width        : 80,
@@ -158,18 +157,34 @@ export default class SignUpScreen extends Component {
 							/* value={values.password} */
 						/>
 					</View>
-
-					<TouchableHighlight
-						style={styles.buttonContainer}
-						onPress={() => this.props.navigation.navigate('Login')}
-					>
-						<Text>Already registered? Login</Text>
-					</TouchableHighlight>
 				</View>
 			</ScrollView>
 		);
 	}
 }
+
+function SignUpScreen({ route, navigation }) {
+	return (
+		<View style={{ flex: 1 }}>
+			<TouchableHighlight style={styles.menuButton}>
+				<AntDesign
+					name="bars"
+					size={40}
+					color="blue"
+					style={{ padding: 2 }}
+					onPress={() => navigation.toggleDrawer()}
+				/>
+			</TouchableHighlight>
+			<ScrollView>
+				<SignUp />
+				<TouchableHighlight style={styles.buttonContainer} onPress={() => navigation.navigate('Login')}>
+					<Text>Already registered? Login</Text>
+				</TouchableHighlight>
+			</ScrollView>
+		</View>
+	);
+}
+export default SignUpScreen;
 
 const styles = StyleSheet.create({
 	container       : {
@@ -219,5 +234,13 @@ const styles = StyleSheet.create({
 	},
 	loginText       : {
 		color : 'white'
+	},
+	menuButton      : {
+		height         : 60,
+		justifyContent : 'space-between',
+		justifyContent : 'flex-end',
+		alignItems     : 'flex-end',
+		padding        : 2,
+		margin         : 5
 	}
 });

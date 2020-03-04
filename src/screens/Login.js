@@ -9,13 +9,12 @@ import {
 	TouchableHighlight,
 	ScrollView,
 	Image,
-	Alert
+	Alert,
+	Button
 } from 'react-native';
-/* import ShowPassword from './ShowPassword';
-import { api } from '../../api/api'; */
-/* import deviceStorage from '../../services/deviceStorage';
- */
-export default class LoginScreen extends Component {
+import { AntDesign } from '@expo/vector-icons';
+
+class Login extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -80,81 +79,89 @@ export default class LoginScreen extends Component {
 
 	render() {
 		return (
-			<ScrollView>
-				<View style={styles.container}>
-					<TouchableOpacity onPress={() => this.props.navigation.navigate('Profile')}>
-						<Image
-							style={{
-								width        : 80,
-								height       : 80,
-								margin       : 10,
-								marginTop    : 15,
-								marginBottom : 15
-							}}
-							source={require('../../assets/logo.png')}
-						/>
-					</TouchableOpacity>
-					<Text style={{ color: 'red' }}>{this.state.errors}</Text>
-
-					<View style={styles.inputContainer}>
-						<Image
-							style={styles.inputIcon}
-							source={{
-								uri : 'https://png.icons8.com/message/ultraviolet/50/3498db'
-							}}
-						/>
-						<TextInput
-							style={styles.inputs}
-							placeholder="Email"
-							keyboardType="email-address"
-							underlineColorAndroid="transparent"
-							autoCapitalize="none"
-							onChangeText={(email) => this.setState({ email, errors: '' })}
-						/>
-					</View>
-
-					<View style={styles.inputContainer}>
-						<Image
-							style={styles.inputIcon}
-							source={{
-								uri : 'https://png.icons8.com/key-2/ultraviolet/50/3498db'
-							}}
-						/>
-						<TextInput
-							style={styles.inputs}
-							placeholder="Password"
-							secureTextEntry={true}
-							underlineColorAndroid="transparent"
-							autoCapitalize="none"
-							onChangeText={(password) => this.setState({ password, errors: '' })}
-						/>
-					</View>
-					<TouchableHighlight
-						style={[ styles.buttonContainer, styles.loginButton ]}
-						onPress={() => this.login()}
-					>
-						<Text style={styles.loginText}>Login</Text>
-					</TouchableHighlight>
-
-					<Text style={{ color: '#85c4ea' }}>Are you already registered?</Text>
-
-					<View
+			<View style={styles.container}>
+				<TouchableOpacity onPress={() => this.props.navigation.navigate('Details')}>
+					<Image
 						style={{
-							display : 'flex'
+							width        : 80,
+							height       : 80,
+							margin       : 10,
+							marginTop    : 15,
+							marginBottom : 15
 						}}
-					>
-						<TouchableOpacity
-							style={styles.buttonContainer}
-							onPress={() => this.props.navigation.navigate('SignUp')}
-						>
-							<Text style={{ color: '#85c4ea' }}>Register</Text>
-						</TouchableOpacity>
-					</View>
+						source={require('../../assets/logo.png')}
+					/>
+				</TouchableOpacity>
+				<Text style={{ color: 'red' }}>{this.state.errors}</Text>
+
+				<View style={styles.inputContainer}>
+					<Image
+						style={styles.inputIcon}
+						source={{
+							uri : 'https://png.icons8.com/message/ultraviolet/50/3498db'
+						}}
+					/>
+					<TextInput
+						style={styles.inputs}
+						placeholder="Email"
+						keyboardType="email-address"
+						underlineColorAndroid="transparent"
+						autoCapitalize="none"
+						onChangeText={(email) => this.setState({ email, errors: '' })}
+					/>
 				</View>
-			</ScrollView>
+
+				<View style={styles.inputContainer}>
+					<Image
+						style={styles.inputIcon}
+						source={{
+							uri : 'https://png.icons8.com/key-2/ultraviolet/50/3498db'
+						}}
+					/>
+					<TextInput
+						style={styles.inputs}
+						placeholder="Password"
+						secureTextEntry={true}
+						underlineColorAndroid="transparent"
+						autoCapitalize="none"
+						onChangeText={(password) => this.setState({ password, errors: '' })}
+					/>
+				</View>
+				<TouchableHighlight style={[ styles.buttonContainer, styles.loginButton ]} onPress={() => this.login()}>
+					<Text style={styles.loginText}>Login</Text>
+				</TouchableHighlight>
+			</View>
 		);
 	}
 }
+function LoginScreen({ route, navigation }) {
+	return (
+		<View style={{ flex: 1 }}>
+			<TouchableHighlight style={styles.menuButton}>
+				<AntDesign
+					name="bars"
+					size={40}
+					color="blue"
+					style={{ padding: 2 }}
+					onPress={() => navigation.toggleDrawer()}
+				/>
+			</TouchableHighlight>
+			<ScrollView>
+				<Login />
+				<View
+					style={{
+						display : 'flex'
+					}}
+				>
+					<TouchableOpacity style={styles.buttonContainer} onPress={() => navigation.navigate('SignUp')}>
+						<Text style={{ color: '#85c4ea' }}>Register</Text>
+					</TouchableOpacity>
+				</View>
+			</ScrollView>
+		</View>
+	);
+}
+export default LoginScreen;
 
 const styles = StyleSheet.create({
 	container       : {
@@ -204,5 +211,13 @@ const styles = StyleSheet.create({
 	},
 	loginText       : {
 		color : 'white'
+	},
+	menuButton      : {
+		height         : 60,
+		justifyContent : 'space-between',
+		justifyContent : 'flex-end',
+		alignItems     : 'flex-end',
+		padding        : 2,
+		margin         : 5
 	}
 });
