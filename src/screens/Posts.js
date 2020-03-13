@@ -1,17 +1,16 @@
 import React, { Component } from 'react';
 import 'react-native-gesture-handler';
-import Header from './Header';
+import Menu from './Menu';
 import PostCard from './PostCard';
 import AddPosts from './AddPosts';
 import axios from 'axios';
 import { ScrollView } from 'react-native-gesture-handler';
 import { AntDesign } from '@expo/vector-icons';
 import { StyleSheet, TextInput, Modal, Button, Text, TouchableHighlight, View, Alert } from 'react-native';
+import { connect } from 'react-redux';
+import { getPosts } from '../../Redux/actions/postAction';
 
-class PostsScreen extends Component {
-	/*   static navigationOptions = {
-    headerShown: false,
-  }; */
+class Posts extends Component {
 	constructor(props) {
 		super(props);
 
@@ -23,11 +22,10 @@ class PostsScreen extends Component {
 	//get the data
 
 	componentDidMount() {
-		/* 	console.log('XXXX', this.props); */
-		axios.get('http://192.168.178.21:3001/api/posts/list').then((results) => {
-			this.setState({ posts: results.data });
-			console.log('posts list', this.state.posts);
-		});
+		this.props.dispatchGetPosts();
+		/* this.props.navigation.setParams({
+			headerRight : 'helloooooo'
+		}); */
 	}
 	onAddPostPressed = (value) => {
 		this.setState({
@@ -45,42 +43,38 @@ class PostsScreen extends Component {
 
 	render() {
 		return (
-			<ScrollView>
-				<TouchableHighlight>
-					<AddPosts addPostFunction={(value) => this.onAddPostPressed(value)} />
+			<View style={{ flex: 1 }}>
+				<TouchableHighlight style={styles.menuButton}>
+					<Menu {...this.props} />
 				</TouchableHighlight>
+				<ScrollView styles={styles.container}>
+					<TouchableHighlight>
+						<AddPosts addPostFunction={(value) => this.onAddPostPressed(value)} />
+					</TouchableHighlight>
 
-				<View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-					<Text>POSTS</Text>
-					{this.state.posts.map((post, index) => {
-						return <PostCard post={post} key={index} removePost={this.removePost} />;
-					})}
-				</View>
-			</ScrollView>
+					<View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+						<Text>POSTS</Text>
+						{this.props.posts.map((post, index) => {
+							return <PostCard post={post} key={index} removePost={this.removePost} />;
+						})}
+					</View>
+				</ScrollView>
+			</View>
 		);
 	}
 }
 
-function Posts({ route, navigation }) {
-	return (
-		<View style={{ flex: 1 }}>
-			<TouchableHighlight style={styles.menuButton}>
-				<AntDesign
-					name="bars"
-					size={40}
-					color="blue"
-					style={{ padding: 2 }}
-					onPress={() => navigation.toggleDrawer()}
-				/>
-			</TouchableHighlight>
-			<View styles={styles.container}>
-				<PostsScreen />
-			</View>
-		</View>
-	);
-}
+const mapStateToProps = (state) => {
+	const { posts, userLoggedIn, loading, error, post, postLoading } = state.posts;
 
-export default Posts;
+	return { posts, userLoggedIn, loading, error, post, postLoading };
+};
+
+const mapDispatchToProps = {
+	dispatchGetPosts : getPosts
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Posts);
 
 const styles = StyleSheet.create({
 	container  : {

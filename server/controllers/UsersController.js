@@ -7,13 +7,13 @@ var config = require('../config');
 
 const userController = {};
 
-//List all users
+//List all user
 userController.list = (req, res) => {
-	User.find({}).exec((error, users) => {
+	User.find({}).exec((error, user) => {
 		if (error) {
 			console.log('Error:', error);
 		} else {
-			res.send(users);
+			res.send(user);
 		}
 	});
 };

@@ -1,24 +1,13 @@
 import React, { Component } from 'react';
-import { Text, View, StyleSheet, Button, Dimensions, TouchableHighlight, Image } from 'react-native';
+import { Text, View, StyleSheet, Button, Dimensions, TouchableOpacity, TouchableHighlight, Image } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import { AntDesign } from '@expo/vector-icons';
 import { ScrollView } from 'react-native-gesture-handler';
+import Menu from './Menu';
 
-class GoogleMapsPage extends Component {
-	/* static navigationOptions = ({ navigation }) => {
-		return {
-			headerTitle      : navigation.getParam('HeaderTitle', 'TEST'),
-			headerStyle      : {
-				backgroundColor : navigation.getParam('BackgroundColor', '#E050FB')
-			},
-			headerTintColor  : navigation.getParam('HeaderTintColor', '#fff'),
-			headerTitleStyle : {
-				color : navigation.getParam('Color', '#fff')
-			}
-		};
-	}; */
-	constructor() {
-		super();
+class GoogleMapsScreen extends Component {
+	constructor(props) {
+		super(props);
 		this.state = {
 			markers : [
 				{
@@ -41,72 +30,56 @@ class GoogleMapsPage extends Component {
 		});
 	}
 
-	render() {
+	render(navigation) {
 		return (
-			<View style={styles.mapContainer}>
-				<MapView
-					onRegionChangeComplete={(region) => {
-						this.setState({ currentView: region });
-					}}
-					style={styles.mapStyle}
-					initialRegion={{
-						latitude       : 52.515816,
-						longitude      : 13.454293,
-						latitudeDelta  : 0.1,
-						longitudeDelta : 0.1
-					}}
+			<View style={styles.container}>
+				<TouchableHighlight style={styles.menuButton}>
+					<Menu {...this.props} />
+				</TouchableHighlight>
+
+				<TouchableOpacity
+					style={styles.buttonContainer}
+					onPress={() => this.props.navigation.navigate('CameraPic')}
 				>
-					{this.state.markers.map((marker, i) => {
-						return (
-							<Marker
-								style={styles.marker}
-								key={i}
-								coordinate={marker.coordinate}
-								title={marker.title}
-								description={marker.description}
-							/>
-						);
-					})}
-				</MapView>
+					<Text style={{ color: 'red', padding: 2 }}>REPORT A LITTER</Text>
+				</TouchableOpacity>
+				<ScrollView style={styles.mapContainer}>
+					<MapView
+						onRegionChangeComplete={(region) => {
+							this.setState({ currentView: region });
+						}}
+						style={styles.mapStyle}
+						initialRegion={{
+							latitude       : 52.515816,
+							longitude      : 13.454293,
+							latitudeDelta  : 0.1,
+							longitudeDelta : 0.1
+						}}
+					>
+						{this.state.markers.map((marker, i) => {
+							return (
+								<Marker
+									style={styles.marker}
+									key={i}
+									coordinate={marker.coordinate}
+									title={marker.title}
+									description={marker.description}
+								/>
+							);
+						})}
+					</MapView>
+				</ScrollView>
 			</View>
 		);
 	}
-}
-
-function GoogleMapsScreen({ route, navigation }) {
-	return (
-		<View style={styles.container}>
-			<TouchableHighlight style={styles.menuButton}>
-				<AntDesign
-					name="bars"
-					size={40}
-					color="blue"
-					style={{ padding: 2 }}
-					onPress={() => navigation.toggleDrawer()}
-				/>
-			</TouchableHighlight>
-
-			<TouchableHighlight style={styles.buttonContainer}>
-				<Button
-					style={{ width: 20, height: 20 }}
-					title="camera"
-					onPress={() => navigation.navigate('CameraPic')}
-				/>
-			</TouchableHighlight>
-
-			<ScrollView>
-				<GoogleMapsPage />
-			</ScrollView>
-		</View>
-	);
 }
 
 export default GoogleMapsScreen;
 
 const styles = StyleSheet.create({
 	container       : {
-		flex            : 1,
-		backgroundColor : '#fff'
+		flex : 1
+		/* backgroundColor : 'transparent' */
 		/* justifyContent  : 'center',
 		alignItems      : 'center',
 		zIndex          : 9 */
@@ -131,7 +104,7 @@ const styles = StyleSheet.create({
 		height         : 60,
 		/* position       : 'absolute', */
 		/* right          : 5, */
-
+		/* backgroundColor : 'gray', */
 		justifyContent : 'space-between',
 		justifyContent : 'flex-end',
 		alignItems     : 'flex-end',
@@ -140,25 +113,28 @@ const styles = StyleSheet.create({
 		margin         : 5
 	},
 	buttonContainer : {
-		justifyContent : 'center',
-		alignItems     : 'center',
+		justifyContent  : 'center',
+		alignItems      : 'center',
 
-		width          : 300,
-		margin         : 5,
-
-		/* backgroundColor : '#FFFFFF', */
-		height         : 50,
-		position       : 'absolute',
+		width           : 300,
+		margin          : 5,
+		borderRadius    : 50,
+		backgroundColor : '#FFFFFF',
+		height          : 50,
+		position        : 'absolute',
 		/* flexDirection   : 'row', */
-		bottom         : 0,
-		justifyContent : 'space-between',
+		bottom          : 0,
+		justifyContent  : 'space-between',
 
 		/* padding         : 5, */
-		borderRadius   : 5,
-		borderWidth    : 1,
-		borderColor    : '#85c4ea',
-		maxHeight      : 100,
-		alignSelf      : 'center',
-		zIndex         : 999
+		borderRadius    : 5,
+		borderWidth     : 1,
+		borderColor     : '#85c4ea',
+		maxHeight       : 100,
+		alignSelf       : 'center',
+		zIndex          : 999
+	},
+	marker          : {
+		margin : 5
 	}
 });

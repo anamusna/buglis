@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
-
+import axios from 'axios';
+import { api } from '../../api';
+import deviceStorage from '../../deviceStorage';
+import Menu from './Menu';
+import { ScrollView } from 'react-native-gesture-handler';
 import {
 	StyleSheet,
 	Text,
@@ -8,182 +12,152 @@ import {
 	TouchableOpacity,
 	TouchableHighlight,
 	Image,
-	ScrollView,
 	Alert,
 	Button
 } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 
-class SignUp extends Component {
+class SignUpScreen extends Component {
 	constructor(props) {
 		super(props);
+
 		this.state = {
-			email        : '',
-			password     : '',
-			userLoggedIn : false,
-			errors       : ''
+			name     : '',
+			email    : '',
+			username : '',
+			password : '',
+			signedUp : false
 		};
 	}
+	onChangeValue = (key, value) => {
+		this.setState({ [key]: value });
+	};
+	/* 	getUri = (uri) => {
+		console.log(uri);
+		this.setState({ avatar: uri });
+	}; */
 
-	static navigationOptions = {
-		headerTitle     : ' SignUp',
-		headerStyle     : { backgroundColor: '#white' },
-		headerTintColor : '#85c4ea'
+	submitSignUp = () => {
+		const userData = new FormData();
+		userData.append('name', this.state.name);
+		userData.append('email', this.state.email);
+		userData.append('username', this.state.username);
+		userData.append('password', this.state.password);
+		console.log('AHAAA', this.state.user);
+		const config = {
+			headers : {
+				Accept         : 'application/json',
+				'Content-Type' : 'multipart/form-data'
+			}
+		};
+
+		axios
+			.post('http://192.168.178.21:3001/api/users/signup', userData)
+			.then((response) => {
+				this.setState({ user: response.data });
+				console.log('user list', response);
+			})
+			.catch((error) =>
+				this.setState({
+					error : error
+				})
+			);
 	};
 
-	componentWillUnmount() {
-		this.setState({ errors: '' });
-	}
-	onChangeText = (key, val) => {
-		this.setState({ [key]: val });
-	};
-
-	/*   login = () => {
-    if (this.state.email !== "") {
-      return axios
-        .post(api + "/api/login", {
-          email: this.state.email,
-          password: this.state.password
-        })
-        .then(response => {
-          if (response.status === 200) {
-            if (response.data.token) {
-              deviceStorage.saveItem("id_token", response.data.token);
-              deviceStorage.saveItem("avatar", response.data.avatar);
-              this.setState({
-                userLoggedIn: true
-              });
-
-              this.props.navigation.navigate("LoginAnimation", {
-                id_token: response.data.token
-              });
-            } else {
-              this.setState({
-                userLoggedIn: false,
-                errors: "You are not registered"
-              });
-              console.log("You are not registered");
-            }
-          }
-        })
-        .catch(error => {
-          throw error;
-        });
-    } else {
-      this.setState({
-        userLoggedIn: false,
-        errors: "Please, fill the inputs"
-      });
-    }
-  }; */
-
-	render() {
+	render(navigation) {
 		return (
-			<ScrollView>
-				<View style={styles.container}>
-					<TouchableOpacity /* onPress={() => this.props.navigation.navigate('Profile')} */>
-						<Image
-							style={{
-								width        : 80,
-								height       : 80,
-								margin       : 10,
-								marginTop    : 15,
-								marginBottom : 15
-							}}
-							source={require('../../assets/logo.png')}
-						/>
-					</TouchableOpacity>
-					<Text style={{ color: 'red' }}>{this.state.errors}</Text>
+			<View style={{ flex: 1 }}>
+				<TouchableHighlight style={styles.menuButton}>
+					<Menu {...this.props} />
+				</TouchableHighlight>
+				<ScrollView>
+					<View style={styles.container}>
+						<TouchableOpacity /* onPress={() => this.props.navigation.navigate('Profile')} */>
+							<Image
+								style={{
+									width        : 80,
+									height       : 80,
+									margin       : 10,
+									marginTop    : 15,
+									marginBottom : 15
+								}}
+								source={require('../../assets/logo.png')}
+							/>
+						</TouchableOpacity>
+						<Text style={{ color: 'red' }}>{this.state.errors}</Text>
 
-					<View style={styles.inputContainer}>
-						<Image
-							style={styles.inputIcon}
-							source={{
-								uri : 'https://png.icons8.com/message/ultraviolet/50/3498db'
-							}}
-						/>
-						<TextInput
-							style={styles.inputs}
-							placeholder="Email"
-							keyboardType="email-address"
-							underlineColorAndroid="transparent"
-							autoCapitalize="none"
-							onChangeText={(email) => this.setState({ email, errors: '' })}
-						/>
+						<View style={styles.inputContainer}>
+							<TextInput
+								name="name"
+								style={styles.inputs}
+								placeholder="Name"
+								onChangeText={(value) => this.onChangeValue('name', value)}
+								placeholderStyle={{ paddingLeft: 10 }}
+								keyboardType="email-address"
+								underlineColorAndroid="transparent"
+								autoCapitalize="none"
+								value={this.state.name}
+							/>
+						</View>
+						<View style={styles.inputContainer}>
+							<TextInput
+								name="email"
+								style={styles.inputs}
+								onChangeText={(value) => this.onChangeValue('email', value)}
+								placeholder="Email"
+								placeholderStyle={{ paddingLeft: 10 }}
+								keyboardType="email-address"
+								underlineColorAndroid="transparent"
+								autoCapitalize="none"
+								value={this.state.email}
+							/>
+						</View>
+						<View style={styles.inputContainer}>
+							<TextInput
+								name="username"
+								style={styles.inputs}
+								placeholder="Username"
+								onChangeText={(value) => this.onChangeValue('username', value)}
+								placeholderStyle={{ paddingLeft: 10 }}
+								keyboardType="email-address"
+								underlineColorAndroid="transparent"
+								autoCapitalize="none"
+								value={this.state.username}
+							/>
+						</View>
+						<View style={styles.inputContainer}>
+							<TextInput
+								name="password"
+								style={styles.inputs}
+								secureTextEntry
+								onChangeText={(value) => this.onChangeValue('password', value)}
+								placeholder="Password"
+								placeholderStyle={{ paddingLeft: 10 }}
+								keyboardType="email-address"
+								underlineColorAndroid="transparent"
+								autoCapitalize="none"
+								value={this.state.password}
+							/>
+						</View>
+						<TouchableHighlight
+							style={[ styles.buttonContainer, styles.signupButton ]}
+							onPress={() => this.submitSignUp()}
+						>
+							<Text style={styles.signupText}>Sign up</Text>
+						</TouchableHighlight>
 					</View>
-
-					<View style={styles.inputContainer}>
-						<TextInput
-							name="first_name"
-							style={styles.inputs}
-							/* onChangeText={(text) => onChangeValue('first_name', text)} */
-							placeholder="Name"
-							/* 		value={values.first_name} */
-							underlineColorAndroid="transparent"
-						/>
-					</View>
-					<View style={styles.inputContainer}>
-						<TextInput
-							name="last_name"
-							style={styles.inputs}
-							onChangeText={(text) => onChangeValue('last_name', text)}
-							placeholder="Last Name"
-							/* value={values.last_name} */
-							underlineColorAndroid="transparent"
-						/>
-					</View>
-					<View style={styles.inputContainer}>
-						<TextInput
-							name="email"
-							style={styles.inputs}
-							onChangeText={(text) => onChangeValue('email', text)}
-							placeholder="Email"
-							/* value={values.email} */
-							autoCapitalize="none"
-						/>
-					</View>
-					<View>
-						<Text style={[ styles.small, { paddingTop: 10, paddingBottom: 2 } ]}>
-							We'll never share your email with anyone else.
-						</Text>
-					</View>
-					<View style={styles.inputContainer}>
-						<TextInput
-							name="password"
-							style={styles.inputs}
-							secureTextEntry
-							onChangeText={(text) => onChangeValue('password', text)}
-							placeholder="Password"
-							/* value={values.password} */
-						/>
-					</View>
-				</View>
-			</ScrollView>
+					<TouchableHighlight
+						style={styles.buttonContainer}
+						onPress={() => this.props.navigation.navigate('Login')}
+					>
+						<Text>Already registered? Login</Text>
+					</TouchableHighlight>
+				</ScrollView>
+			</View>
 		);
 	}
 }
 
-function SignUpScreen({ route, navigation }) {
-	return (
-		<View style={{ flex: 1 }}>
-			<TouchableHighlight style={styles.menuButton}>
-				<AntDesign
-					name="bars"
-					size={40}
-					color="blue"
-					style={{ padding: 2 }}
-					onPress={() => navigation.toggleDrawer()}
-				/>
-			</TouchableHighlight>
-			<ScrollView>
-				<SignUp />
-				<TouchableHighlight style={styles.buttonContainer} onPress={() => navigation.navigate('Login')}>
-					<Text>Already registered? Login</Text>
-				</TouchableHighlight>
-			</ScrollView>
-		</View>
-	);
-}
 export default SignUpScreen;
 
 const styles = StyleSheet.create({

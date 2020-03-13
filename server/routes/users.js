@@ -1,26 +1,26 @@
 const express = require('express');
 const router = express.Router();
-//const multer = require ('multer');
-
 const cors = require('cors');
+const userController = require('../controllers/UsersController.js');
 
-const postController = require('../controllers/PostsController.js');
-const upload = require('../handlers/multer');
+//get a list of users
+router.get('/user/list', cors(), userController.list);
 
-//get a list of posts
-router.get('/posts/list', cors(), postController.list);
+//add a new users to DB
+router.post('/user/signup', cors(), userController.create);
 
-//add a new posts to DB
-router.post('/posts/new', upload.single('image'), cors(), postController.save);
+//signin
+router.post('/user/signin', cors(), userController.check);
 
-//show a post
-router.get('/posts/:id', cors(), postController.show);
+//show a user
 
-//update a posts in the DB
+router.get('/user/:id', cors(), userController.show);
 
-router.put('/posts/', cors(), postController.update);
+//update a users in the DB
 
-//delete a post in the DB
-router.delete('/posts/', cors(), postController.delete);
+router.put('/user/:id', cors(), userController.update);
+
+//delete a user in the DB
+router.delete('/user/:id', cors(), userController.delete);
 
 module.exports = router;

@@ -114,10 +114,8 @@ class AddPosts extends Component {
 									placeholder="title"
 									placeholderStyle={{ paddingLeft: 10 }}
 									multiline={true}
-									underlineColorAndroid="transparent"
 									style={[ styles.textInput ]}
 									keyboardType="email-address"
-									underlineColorAndroid="transparent"
 									underlineColorAndroid="transparent"
 									autoCapitalize="none"
 									value={this.state.title}
@@ -132,7 +130,6 @@ class AddPosts extends Component {
 									placeholderStyle={{ paddingLeft: 10 }}
 									keyboardType="email-address"
 									underlineColorAndroid="transparent"
-									underlineColorAndroid="transparent"
 									autoCapitalize="none"
 									value={this.state.description}
 									onChangeText={(value) => this.onChangeValue('description', value)}
@@ -144,7 +141,6 @@ class AddPosts extends Component {
 									placeholderStyle={{ paddingLeft: 10 }}
 									keyboardType="email-address"
 									underlineColorAndroid="transparent"
-									underlineColorAndroid="transparent"
 									autoCapitalize="none"
 									value={this.state.genre}
 									onChangeText={(value) => this.onChangeValue('genre', value)}
@@ -155,7 +151,6 @@ class AddPosts extends Component {
 									placeholder="Address"
 									placeholderStyle={{ paddingLeft: 10 }}
 									keyboardType="email-address"
-									underlineColorAndroid="transparent"
 									underlineColorAndroid="transparent"
 									autoCapitalize="none"
 									value={this.state.director}

@@ -1,7 +1,7 @@
 import 'react-native-gesture-handler';
 import * as React from 'react';
 import { View, Text, Button } from 'react-native';
-import Header from './Header';
+import Menu from './Menu';
 
 function DetailsScreen({ route, navigation }) {
 	/*  2. Get the param */
