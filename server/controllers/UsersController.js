@@ -56,6 +56,7 @@ userController.create = (req, res, next) => {
 //login method
 
 userController.check = (req, res) => {
+	console.log('CONTROLLER', req.body);
 	User.find({
 		username : req.body.username
 	})

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { api } from '../../api';
 import deviceStorage from '../../deviceStorage';
+import * as actions from '../../Redux/actions/userActions';
 import Menu from './Menu';
 import { ScrollView } from 'react-native-gesture-handler';
 import {
@@ -15,20 +16,17 @@ import {
 	Alert,
 	Button
 } from 'react-native';
+import { connect } from 'react-redux';
+import { createUser, signUp } from '../../Redux/actions/userActions';
 import { AntDesign } from '@expo/vector-icons';
 
 class SignUpScreen extends Component {
 	constructor(props) {
 		super(props);
 
-		this.state = {
-			name     : '',
-			email    : '',
-			username : '',
-			password : '',
-			signedUp : false
-		};
+		this.state = {};
 	}
+
 	onChangeValue = (key, value) => {
 		this.setState({ [key]: value });
 	};
@@ -38,33 +36,26 @@ class SignUpScreen extends Component {
 	}; */
 
 	submitSignUp = () => {
-		const userData = new FormData();
-		userData.append('name', this.state.name);
-		userData.append('email', this.state.email);
-		userData.append('username', this.state.username);
-		userData.append('password', this.state.password);
-		console.log('AHAAA', this.state.user);
-		const config = {
-			headers : {
-				Accept         : 'application/json',
-				'Content-Type' : 'multipart/form-data'
-			}
-		};
+		let data = JSON.stringify({
+			name     : this.state.name,
+			email    : this.state.email,
+			username : this.state.username,
+			password : this.state.password
+		});
 
-		axios
-			.post('http://192.168.178.21:3001/api/users/signup', userData)
-			.then((response) => {
-				this.setState({ user: response.data });
-				console.log('user list', response);
-			})
-			.catch((error) =>
-				this.setState({
-					error : error
-				})
-			);
+		console.log('USER SIGNUP STATE', data);
+		this.props.dispatchCreateUser(data);
 	};
 
-	render(navigation) {
+	componentDidMount() {
+		const { user } = this.props;
+		this.setState({ user: this.props });
+		console.log('USER  STATE', user);
+		this.props.dispatchCreateUser(user);
+		this.props.navigation.navigate('Posts');
+	}
+
+	render() {
 		return (
 			<View style={{ flex: 1 }}>
 				<TouchableHighlight style={styles.menuButton}>
@@ -139,12 +130,11 @@ class SignUpScreen extends Component {
 								value={this.state.password}
 							/>
 						</View>
-						<TouchableHighlight
+						<Button
+							title="Sign up"
 							style={[ styles.buttonContainer, styles.signupButton ]}
 							onPress={() => this.submitSignUp()}
-						>
-							<Text style={styles.signupText}>Sign up</Text>
-						</TouchableHighlight>
+						/>
 					</View>
 					<TouchableHighlight
 						style={styles.buttonContainer}
@@ -158,7 +148,19 @@ class SignUpScreen extends Component {
 	}
 }
 
-export default SignUpScreen;
+function mapStateToProps(state) {
+	const { user } = state;
+	console.log('XZXZXZ', user);
+	return {
+		user : user
+	};
+}
+
+const mapDispatchToProps = {
+	dispatchCreateUser : createUser
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(SignUpScreen);
 
 const styles = StyleSheet.create({
 	container       : {
@@ -214,7 +216,6 @@ const styles = StyleSheet.create({
 		justifyContent : 'space-between',
 		justifyContent : 'flex-end',
 		alignItems     : 'flex-end',
-		padding        : 2,
 		margin         : 5
 	}
 });

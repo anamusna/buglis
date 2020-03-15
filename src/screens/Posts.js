@@ -6,7 +6,17 @@ import AddPosts from './AddPosts';
 import axios from 'axios';
 import { ScrollView } from 'react-native-gesture-handler';
 import { AntDesign } from '@expo/vector-icons';
-import { StyleSheet, TextInput, Modal, Button, Text, TouchableHighlight, View, Alert } from 'react-native';
+import {
+	StyleSheet,
+	TextInput,
+	TouchableOpacity,
+	Modal,
+	Button,
+	Text,
+	TouchableHighlight,
+	View,
+	Alert
+} from 'react-native';
 import { connect } from 'react-redux';
 import { getPosts } from '../../Redux/actions/postAction';
 
@@ -44,9 +54,9 @@ class Posts extends Component {
 	render() {
 		return (
 			<View style={{ flex: 1 }}>
-				<TouchableHighlight style={styles.menuButton}>
+				<TouchableOpacity style={styles.menuButton}>
 					<Menu {...this.props} />
-				</TouchableHighlight>
+				</TouchableOpacity>
 				<ScrollView styles={styles.container}>
 					<TouchableHighlight>
 						<AddPosts addPostFunction={(value) => this.onAddPostPressed(value)} />
@@ -89,7 +99,7 @@ const styles = StyleSheet.create({
 		justifyContent : 'space-between',
 		justifyContent : 'flex-end',
 		alignItems     : 'flex-end',
-		padding        : 2,
+
 		margin         : 5
 	}
 });

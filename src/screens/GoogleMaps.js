@@ -108,8 +108,6 @@ const styles = StyleSheet.create({
 		justifyContent : 'space-between',
 		justifyContent : 'flex-end',
 		alignItems     : 'flex-end',
-		padding        : 2,
-		/* 	width          : 300, */
 		margin         : 5
 	},
 	buttonContainer : {

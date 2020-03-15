@@ -1,5 +1,10 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 import { api } from '../../api';
+import deviceStorage from '../../deviceStorage';
+import * as actions from '../../Redux/actions/userActions';
+import Menu from './Menu';
+import { ScrollView } from 'react-native-gesture-handler';
 import {
 	StyleSheet,
 	Text,
@@ -11,9 +16,8 @@ import {
 	Alert,
 	Button
 } from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
-import axios from 'axios';
-import Menu from './Menu';
+import { connect } from 'react-redux';
+import { LoginUser } from '../../Redux/actions/userActions';
 import { AntDesign } from '@expo/vector-icons';
 
 class LoginScreen extends Component {
@@ -27,44 +31,28 @@ class LoginScreen extends Component {
 		};
 	}
 
-	componentWillUnmount() {
-		this.setState({ errors: '' });
+	onChangeValue = (key, value) => {
+		this.setState({ [key]: value });
+	};
+
+	submitLogin = () => {
+		let data = JSON.stringify({
+			username : this.state.username,
+
+			password : this.state.password
+		});
+
+		console.log('USER Login STATE', data);
+		this.props.dispatchLoginUser(data);
+		this.props.navigation.navigate('Posts');
+	};
+
+	componentDidMount() {
+		const { user } = this.props;
+		this.setState({ user: this.props });
+		console.log('USER LOGIN MOUNT', user);
+		this.props.dispatchLoginUser(user);
 	}
-	onChangeText = (key, val) => {
-		this.setState({ [key]: val });
-	};
-
-	login = () => {
-		if (this.state.email !== '') {
-			return axios
-				.post(api + '/api/login', {
-					email    : this.state.email,
-					password : this.state.password
-				})
-				.then((response) => {
-					if (response.status === 200) {
-						/*  if (response.data.token) {
-              deviceStorage.saveItem("id_token", response.data.token);
-              deviceStorage.saveItem("avatar", response.data.avatar); */
-						this.setState({
-							userLoggedIn : true
-						});
-
-						/*   this.props.navigation.navigate("LoginAnimation", {
-                id_token: response.data.token
-              }); */
-					} else {
-						this.setState({
-							userLoggedIn : false,
-							errors       : 'You are not registered'
-						});
-					}
-				});
-			/*  .catch(error => {
-          throw error;
-        }); */
-		}
-	};
 
 	render() {
 		return (
@@ -96,12 +84,15 @@ class LoginScreen extends Component {
 								}}
 							/>
 							<TextInput
+								name="username"
 								style={styles.inputs}
-								placeholder="Email"
+								onChangeText={(value) => this.onChangeValue('username', value)}
+								placeholder="Username"
+								placeholderStyle={{ paddingLeft: 10 }}
 								keyboardType="email-address"
 								underlineColorAndroid="transparent"
 								autoCapitalize="none"
-								onChangeText={(email) => this.setState({ email, errors: '' })}
+								value={this.state.username}
 							/>
 						</View>
 
@@ -114,16 +105,20 @@ class LoginScreen extends Component {
 							/>
 							<TextInput
 								style={styles.inputs}
+								name="password"
+								secureTextEntry
+								onChangeText={(value) => this.onChangeValue('password', value)}
 								placeholder="Password"
-								secureTextEntry={true}
+								placeholderStyle={{ paddingLeft: 10 }}
+								keyboardType="email-address"
 								underlineColorAndroid="transparent"
 								autoCapitalize="none"
-								onChangeText={(password) => this.setState({ password, errors: '' })}
+								value={this.state.password}
 							/>
 						</View>
 						<TouchableHighlight
 							style={[ styles.buttonContainer, styles.loginButton ]}
-							onPress={() => this.login()}
+							onPress={() => this.submitLogin()}
 						>
 							<Text style={styles.loginText}>Login</Text>
 						</TouchableHighlight>
@@ -132,12 +127,11 @@ class LoginScreen extends Component {
 								display : 'flex'
 							}}
 						>
-							<TouchableOpacity
+							<Button
+								title="Register"
 								style={styles.buttonContainer}
 								onPress={() => this.props.navigation.navigate('SignUp')}
-							>
-								<Text style={{ color: '#85c4ea' }}>Register</Text>
-							</TouchableOpacity>
+							/>
 						</View>
 					</View>
 				</ScrollView>
@@ -145,8 +139,18 @@ class LoginScreen extends Component {
 		);
 	}
 }
+function mapStateToProps(state) {
+	const { user } = state;
+	console.log('COMPONENT STATE', user);
+	return {
+		user : user
+	};
+}
+const mapDispatchToProps = {
+	dispatchLoginUser : LoginUser
+};
 
-export default LoginScreen;
+export default connect(mapStateToProps, mapDispatchToProps)(LoginScreen);
 
 const styles = StyleSheet.create({
 	container       : {
@@ -202,7 +206,6 @@ const styles = StyleSheet.create({
 		justifyContent : 'space-between',
 		justifyContent : 'flex-end',
 		alignItems     : 'flex-end',
-		padding        : 2,
 
 		margin         : 5
 	}

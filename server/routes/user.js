@@ -20,8 +20,7 @@ router.get('/api/user/showDetails', userController.showDetails);
 
 router.post('/api/user/save_avatar', userController.saveAvatar);
 
-//validate users || professionals login (we have to use one login for both)
-router.post('/api/user/login', cors(), userController.check);
+//validate and login users
 router.post('/api/user/signin', cors(), userController.check);
 
 module.exports = router;

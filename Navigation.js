@@ -21,21 +21,7 @@ const HomeStack = createStackNavigator();
 export default function NavigationScreen(props) {
 	console.disableYellowBox = true;
 	return (
-		<HomeStack.Navigator
-			initialRouteName="Maps"
-			headerMode="null"
-			/* 	screenOptions={{
-				headerRight      : () => <Menu {...props} />,
-				headerLeft       : () => <Logo {...props} />,
-				headerStyle      : {
-					backgroundColor : '#f4511e'
-				},
-				headerTintColor  : '#fff',
-				headerTitleStyle : {
-					fontWeight : 'bold'
-				}
-			}} */
-		>
+		<HomeStack.Navigator initialRouteName="Maps" headerMode="null">
 			<HomeStack.Screen component={GoogleMapsScreen} name="Maps" {...props} />
 			{/* <HomeStack.Screen component={HomeScreen} name="Home" {...props} /> */}
 			<HomeStack.Screen

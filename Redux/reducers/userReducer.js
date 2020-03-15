@@ -1,64 +1,39 @@
-import { CREATE_USER, LOGIN, LOGOUT, SET_USERNAME, SET_PASSWORD, LOGIN_SUCCESS, LOGIN_FAILED } from '../actions/types';
+import {
+	CREATE_USER,
+	CREATE_USER_SUCCESS,
+	LOGIN,
+	LOGOUT,
+	SET_USERNAME,
+	SET_PASSWORD,
+	LOGIN_SUCCESS,
+	LOGIN_FAILED,
+	GET_ALL_USERS
+} from '../actions/types';
 
-export default (user = {}, action) => {
-	switch (action.type) {
-		case CREATE_USER:
-			return action.user;
-		case LOGIN:
-			return action.user;
-		case LOGOUT:
-			return {};
-		default:
-			return user;
-	}
+const initialState = {
+	user : {}
 };
 
-/* export function CreateUser(
-	state = {
-		user : {}
-	},
-	action
-) {
+export default (state = initialState, action) => {
 	switch (action.type) {
-		case CREATE_USER: {
-			return action.user;
-		}
-		case LOGIN: {
-			return action.user;
-		}
+		case CREATE_USER:
+			return {
+				user         : action.payload,
+				userSignedUp : true,
+				error        : null
+			};
+		case LOGIN:
+			return {
+				user         : action.payload,
+				userLoggedIn : true,
+				error        : null
+			};
 		case LOGOUT:
-			return {};
-	}
-} */
-
-/* export function UserLogin(
-	state = {
-		username    : '',
-		password    : '',
-		loginStatus : 'uninitiated',
-		user        : {}
-	},
-	action
-) {
-	switch (action.type) {
-		case SET_USERNAME: {
-			console.log('In set username reducer');
-			return { ...state, username: action.payload };
-		}
-		case SET_PASSWORD: {
-			console.log('In set password reducer');
-			return { ...state, password: action.payload };
-		}
-		case LOGIN: {
-			return { ...state, loginStatus: 'ongoing' };
-		}
-		case LOGIN_SUCCESS: {
-		}
-		case LOGIN_FAILED: {
-			return { ...state, loginStatus: 'failed' };
-		}
-		default: {
+			return {
+				...state,
+				user : {}
+			};
+		default:
 			return state;
-		}
 	}
-} */
+};
