@@ -1,4 +1,12 @@
-import { GET_POSTS, GET_POSTS_SUCCESS, GET_POST, GET_POST_SUCCESS, GET_POST_FAILURE, CLEAR_POST } from './types';
+import {
+	GET_POSTS,
+	GET_POSTS_SUCCESS,
+	GET_POST,
+	GET_POST_SUCCESS,
+	GET_POST_FAILURE,
+	CLEAR_POST,
+	GET_POSTS_FAILURE
+} from './types';
 import axios from 'axios';
 import { api } from '../../api/api';
 
@@ -10,6 +18,7 @@ const config = {
 };
 
 const endpoint = '/api/posts/list';
+
 export function getPosts() {
 	return (dispatch) => {
 		dispatch({ type: GET_POSTS });
@@ -17,7 +26,7 @@ export function getPosts() {
 		return axios
 			.get(`${api}${endpoint}`, config)
 			.then((response) => {
-				console.log('POST RES', response);
+				/* console.log('POST RES', response.data); */
 				dispatch({
 					type    : GET_POSTS_SUCCESS,
 					payload : response.data
@@ -25,8 +34,8 @@ export function getPosts() {
 			})
 			.catch((error) => {
 				dispatch({
-					type    : GET_POSTS_SUCCESS,
-					payload : []
+					type    : GET_POSTS_FAILURE,
+					payload : error
 				});
 				return null;
 			});

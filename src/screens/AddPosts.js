@@ -14,6 +14,7 @@ import {
 import { ScrollView } from 'react-native-gesture-handler';
 import * as ImagePicker from 'expo-image-picker';
 import * as axios from 'axios';
+import { AntDesign, Ionicons } from '@expo/vector-icons';
 
 class AddPosts extends Component {
 	state = {
@@ -27,14 +28,13 @@ class AddPosts extends Component {
 
 		added        : false
 	};
-
+	refreshPage() {
+		window.location.reload(false);
+	}
 	setModalVisible(visible) {
 		this.setState({ modalVisible: visible });
 	}
 
-	/* 	onChange = (e) => {
-		this.setState({ [e.target.name]: e.target.value });
-	}; */
 	onChangeValue = (key, value) => {
 		/* console.log('GGGG', key, value); */
 		this.setState({ [key]: value });
@@ -68,7 +68,7 @@ class AddPosts extends Component {
 		};
 
 		axios
-			.post('http://192.168.178.21:3001/api/posts/new', formData, config)
+			.post('http://192.168.178.36:3001/api/posts/new', formData, config)
 			.then((response) => {
 				console.log('add post', response);
 				if (response) {
@@ -87,21 +87,22 @@ class AddPosts extends Component {
 
 	render() {
 		return (
-			<View style={{ marginTop: 22 }}>
+			<View>
 				<TouchableHighlight
 					style={styles.buttonContainer}
 					onPress={() => {
 						this.setModalVisible(true);
 					}}
 				>
-					<Text>Add a Post</Text>
+					<Ionicons name="md-add-circle" size={40} color="skyblue" />
+					{/* <Text>Add a Post</Text> */}
 				</TouchableHighlight>
 				<Modal
 					animationType="slide"
 					transparent={false}
 					visible={this.state.modalVisible}
 					onRequestClose={() => {
-						Alert.alert('Modal has been closed.');
+						this.setModalVisible(false);
 					}}
 				>
 					<View style={{ marginTop: 22 }}>
@@ -162,30 +163,12 @@ class AddPosts extends Component {
 									{this.state.image && (
 										<Image source={{ uri: this.state.image }} style={{ width: 350, height: 200 }} />
 									)}
-									<Button title="select a photo" onPress={this.onChangeImage} />
+									<TouchableHighlight style={styles.imageButton} onPress={this.onChangeImage}>
+										<Text>add a photo</Text>
+									</TouchableHighlight>
 								</View>
-
-								{/* 		<TextInput
-									required
-									type="file"
-									name="image"
-									placeholder="url of your image"
-									placeholderStyle={{ paddingLeft: 10 }}
-									multiline={true}
-									underlineColorAndroid="transparent"
-									style={[ styles.textInput ]}
-									keyboardType="image"
-									underlineColorAndroid="transparent"
-									underlineColorAndroid="transparent"
-									autoCapitalize="none"
-									value={this.state.image}
-									name="image"
-									onChange={this.onChangeImage}
-
-									
-								/> */}
-								<TouchableHighlight style={styles.buttonContainer} onPress={() => this.onFormSubmit()}>
-									<Text>Submit</Text>
+								<TouchableHighlight style={styles.submitButton} onPress={() => this.onFormSubmit()}>
+									<Text style={{ color: 'white' }}>Submit</Text>
 								</TouchableHighlight>
 							</View>
 						</ScrollView>
@@ -198,9 +181,10 @@ class AddPosts extends Component {
 
 const styles = StyleSheet.create({
 	container       : {
-		flex           : 1,
-		justifyContent : 'center',
-		alignItems     : 'center'
+		flex            : 1,
+		justifyContent  : 'center',
+		alignItems      : 'center',
+		backgroundColor : 'white'
 	},
 	inputContainer  : {
 		borderBottomColor : '#F5FCFF',
@@ -218,9 +202,36 @@ const styles = StyleSheet.create({
 		justifyContent : 'center',
 		alignItems     : 'center',
 		marginBottom   : 20,
-		width          : 250,
-		margin         : 4,
-		padding        : 5,
+		width          : 60,
+
+		/* padding        : 5, */
+		borderRadius   : 5,
+		borderWidth    : 1,
+		borderColor    : '#85c4ea',
+		maxHeight      : 100,
+		alignSelf      : 'center'
+	},
+	submitButton    : {
+		justifyContent  : 'center',
+		alignItems      : 'center',
+		margin          : 20,
+		width           : 200,
+		height          : 60,
+		backgroundColor : '#85c4ea',
+		/* padding        : 5, */
+		borderRadius    : 5,
+		borderWidth     : 1,
+		borderColor     : '#85c4ea',
+		maxHeight       : 100,
+		alignSelf       : 'center'
+	},
+	imageButton     : {
+		justifyContent : 'center',
+		alignItems     : 'center',
+
+		width          : 300,
+
+		/* padding        : 5, */
 		borderRadius   : 5,
 		borderWidth    : 1,
 		borderColor    : '#85c4ea',

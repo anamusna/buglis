@@ -2,14 +2,23 @@ const mongoose = require('mongoose');
 //const bcrypt = require('bcrypt');
 
 const SessionSchema = new mongoose.Schema({
-	uuid    : {
+	user_id : {
+		type : mongoose.Schema.ObjectId
+	},
+	token   : {
+		type : {
+			type : String
+		}
+	},
+	userId  : {
 		type     : String,
-		required : [ true, 'name field is required' ],
+		required : [ true, 'User ID field in the schema is required' ],
 		unique   : true,
 		trim     : true
 	},
-	user_id : {
-		type : mongoose.Schema.ObjectId
+	date    : {
+		type    : Date,
+		default : Date.now
 	}
 });
 

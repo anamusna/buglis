@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import { api } from '../../api';
-import deviceStorage from '../../deviceStorage';
 import * as actions from '../../Redux/actions/userActions';
-import Menu from './Menu';
+import SearchBox from './SearchBox';
 import { ScrollView } from 'react-native-gesture-handler';
+import { AsyncStorage } from 'react-native';
+import UploadAvatar from './uploadAvatar';
 import {
 	StyleSheet,
 	Text,
@@ -17,18 +18,21 @@ import {
 	Button
 } from 'react-native';
 import { connect } from 'react-redux';
-import { createUser, signUp } from '../../Redux/actions/userActions';
+import { createUser } from '../../Redux/actions/userActions';
 import { AntDesign } from '@expo/vector-icons';
 
 class SignUpScreen extends Component {
 	constructor(props) {
 		super(props);
-
 		this.state = {};
 	}
-
+	getUri = (uri) => {
+		console.log(uri);
+		this.setState({ avatar: uri });
+	};
 	onChangeValue = (key, value) => {
 		this.setState({ [key]: value });
+		/* console.log('ONCHANGE', this.state); */
 	};
 	/* 	getUri = (uri) => {
 		console.log(uri);
@@ -45,36 +49,33 @@ class SignUpScreen extends Component {
 
 		console.log('USER SIGNUP STATE', data);
 		this.props.dispatchCreateUser(data);
+		if (data) {
+			this.props.navigation.navigate('Posts');
+		}
 	};
 
 	componentDidMount() {
 		const { user } = this.props;
-		this.setState({ user: this.props });
-		console.log('USER  STATE', user);
-		this.props.dispatchCreateUser(user);
-		this.props.navigation.navigate('Posts');
+		console.log('USER component STATE', user);
+		/* 	this.setState({ user: this.props.user }); */
+		this.props.dispatchCreateUser();
 	}
 
 	render() {
 		return (
 			<View style={{ flex: 1 }}>
-				<TouchableHighlight style={styles.menuButton}>
-					<Menu {...this.props} />
-				</TouchableHighlight>
+				{/* 	<SearchBox {...this.props} /> */}
+
 				<ScrollView>
 					<View style={styles.container}>
-						<TouchableOpacity /* onPress={() => this.props.navigation.navigate('Profile')} */>
-							<Image
-								style={{
-									width        : 80,
-									height       : 80,
-									margin       : 10,
-									marginTop    : 15,
-									marginBottom : 15
-								}}
-								source={require('../../assets/logo.png')}
+						<View style={{ marginTop: 30 }}>
+							<UploadAvatar
+								getUri={this.getUri}
+								payloadKey="avatar"
+								endpoint={api + '/api/user/save'}
+								callbackUrl="https://cdn.pixabay.com/photo/2017/08/16/00/29/add-person-2646097_960_720.png"
 							/>
-						</TouchableOpacity>
+						</View>
 						<Text style={{ color: 'red' }}>{this.state.errors}</Text>
 
 						<View style={styles.inputContainer}>
@@ -150,7 +151,7 @@ class SignUpScreen extends Component {
 
 function mapStateToProps(state) {
 	const { user } = state;
-	console.log('XZXZXZ', user);
+	console.log('SIGN Redux UP', user);
 	return {
 		user : user
 	};
@@ -212,10 +213,7 @@ const styles = StyleSheet.create({
 		color : 'white'
 	},
 	menuButton      : {
-		height         : 60,
-		justifyContent : 'space-between',
-		justifyContent : 'flex-end',
-		alignItems     : 'flex-end',
-		margin         : 5
+		height : 60,
+		margin : 5
 	}
 });

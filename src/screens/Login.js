@@ -3,8 +3,9 @@ import axios from 'axios';
 import { api } from '../../api';
 import deviceStorage from '../../deviceStorage';
 import * as actions from '../../Redux/actions/userActions';
-import Menu from './Menu';
+import SearchBox from './SearchBox';
 import { ScrollView } from 'react-native-gesture-handler';
+import { AsyncStorage } from 'react-native';
 import {
 	StyleSheet,
 	Text,
@@ -17,7 +18,7 @@ import {
 	Button
 } from 'react-native';
 import { connect } from 'react-redux';
-import { LoginUser } from '../../Redux/actions/userActions';
+import { LoginUser, getUser } from '../../Redux/actions/userActions';
 import { AntDesign } from '@expo/vector-icons';
 
 class LoginScreen extends Component {
@@ -35,31 +36,53 @@ class LoginScreen extends Component {
 		this.setState({ [key]: value });
 	};
 
+	/* 	submitLogin = () => {
+		try {
+			let userData = JSON.stringify({
+				username : this.state.username,
+				password : this.state.password
+			});
+			console.log('USER Login STATE', userData);
+
+			this.props.dispatchLoginUser(userData);
+			console.log('USER STATE', userData);
+			this.setState({ user: userData });
+		} catch (error) {
+			console.log(error);
+		}
+		this.userAuth();
+	}; */
+
 	submitLogin = () => {
-		let data = JSON.stringify({
-			username : this.state.username,
-
-			password : this.state.password
-		});
-
-		console.log('USER Login STATE', data);
-		this.props.dispatchLoginUser(data);
-		this.props.navigation.navigate('Posts');
+		if (this.state.userLoggedIn === false) {
+			let userData = JSON.stringify({
+				username : this.state.username,
+				password : this.state.password
+			});
+			console.log('USER STATE', userData);
+			return this.props.dispatchLoginUser(userData);
+		} else {
+			this.setState({
+				userLoggedIn : false,
+				errors       : 'Please, fill the inputs'
+			});
+		}
 	};
 
-	componentDidMount() {
-		const { user } = this.props;
-		this.setState({ user: this.props });
+	componentDidMount(user) {
 		console.log('USER LOGIN MOUNT', user);
 		this.props.dispatchLoginUser(user);
 	}
 
+	componentDidMount = async () => {
+		getUser();
+	};
+
 	render() {
 		return (
 			<View style={{ flex: 1 }}>
-				<TouchableHighlight style={styles.menuButton}>
-					<Menu {...this.props} />
-				</TouchableHighlight>
+				{/* 	<SearchBox {...this.props} /> */}
+
 				<ScrollView>
 					<View style={styles.container}>
 						<TouchableOpacity onPress={() => this.props.navigation.navigate('Details')}>
@@ -141,9 +164,9 @@ class LoginScreen extends Component {
 }
 function mapStateToProps(state) {
 	const { user } = state;
-	console.log('COMPONENT STATE', user);
+	console.log('LOGIN COMPONENT STATE', user);
 	return {
-		user : user
+		user
 	};
 }
 const mapDispatchToProps = {
@@ -201,12 +224,7 @@ const styles = StyleSheet.create({
 		color : 'white'
 	},
 	menuButton      : {
-		height         : 60,
-
-		justifyContent : 'space-between',
-		justifyContent : 'flex-end',
-		alignItems     : 'flex-end',
-
-		margin         : 5
+		height : 65,
+		margin : 5
 	}
 });

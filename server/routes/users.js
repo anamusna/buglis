@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const cors = require('cors');
 const userController = require('../controllers/UsersController.js');
+const { loginValidation } = require('../authService/index');
 
 //get a list of users
 router.get('/user/list', cors(), userController.list);
@@ -10,8 +11,8 @@ router.get('/user/list', cors(), userController.list);
 router.post('/user/signup', cors(), userController.create);
 
 //signin
+/* router.post('/user/signin', cors(), userController.check); */
 router.post('/user/signin', cors(), userController.check);
-
 //show a user
 
 router.get('/user/:id', cors(), userController.show);
@@ -22,5 +23,11 @@ router.put('/user/:id', cors(), userController.update);
 
 //delete a user in the DB
 router.delete('/user/:id', cors(), userController.delete);
+
+router.get('/api/user/showDetails', cors(), userController.showDetails);
+
+//upload an avatar image
+
+router.post('/api/user/save_avatar', cors(), userController.saveAvatar);
 
 module.exports = router;

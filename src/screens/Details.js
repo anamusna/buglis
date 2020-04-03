@@ -1,20 +1,19 @@
 import 'react-native-gesture-handler';
 import * as React from 'react';
 import { View, Text, Button } from 'react-native';
-import Menu from './Menu';
+import SearchBox from './SearchBox';
 
 function DetailsScreen({ route, navigation }) {
 	/*  2. Get the param */
 
-	/* const { itemId } = route.params;
-	const { otherParam } = route.params; */
+	const { postId } = route.params;
+	const { otherParam } = route.params;
 	return (
 		<View style={{ flex: 1 }}>
-			<Button title="open" style={{ width: 20, height: 20 }} onPress={() => navigation.toggleDrawer()} />
 			<Text>
 				<Text>Details Screen</Text>
-				<Text>itemId: </Text>
-				<Text>otherParam: </Text>
+				<Text>itemId: {postId}</Text>
+				<Text>otherParam: {otherParam} </Text>
 			</Text>
 			{/* 	<Button
 				title="Go to Details... again"

@@ -1,10 +1,11 @@
 const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
+const Schema = mongoose.Schema;
 
 const usersSchema = new mongoose.Schema({
+	_id        : Schema.Types.ObjectId,
 	name       : {
 		type     : String,
-		required : [ true, 'name field is required' ],
+		required : [ true, 'name field in Users is required' ],
 		trim     : true
 	},
 	email      : {
@@ -26,7 +27,9 @@ const usersSchema = new mongoose.Schema({
 		type    : Date,
 		default : Date.now
 	},
-	image      : {}
+	avatar     : {
+		type : String
+	}
 });
 
 module.exports = mongoose.model('User', usersSchema);

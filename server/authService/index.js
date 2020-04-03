@@ -2,9 +2,7 @@ const mongoose = require('mongoose');
 const jwt = require('jwt-simple');
 const moment = require('moment');
 const config = require('../config');
-
-const User = require('../models/User');
-
+const User = require('../models/Users');
 const Session = require('../models/Session');
 
 const bcrypt = require('bcrypt');
@@ -54,7 +52,7 @@ function loginValidation(req, res) {
 		try {
 			User.find({ email: req.body.email }, (err, registeredUsers) => {
 				if (err) {
-					return res.send('Registration failed. Server error');
+					return res.send('OOPs Login Auth failed. Server error');
 				} else if (registeredUsers.length > 0) {
 					bcrypt.compare(req.body.password, registeredUsers[0].password, (err, response) => {
 						if (err) {

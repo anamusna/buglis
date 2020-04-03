@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { Text, View, StyleSheet, Button, Dimensions, TouchableOpacity, TouchableHighlight, Image } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
-import { AntDesign } from '@expo/vector-icons';
+import { AntDesign, Ionicons } from '@expo/vector-icons';
+
 import { ScrollView } from 'react-native-gesture-handler';
-import Menu from './Menu';
+import SearchBox from './SearchBox';
 
 class GoogleMapsScreen extends Component {
 	constructor(props) {
@@ -30,19 +31,11 @@ class GoogleMapsScreen extends Component {
 		});
 	}
 
-	render(navigation) {
+	render() {
 		return (
 			<View style={styles.container}>
-				<TouchableHighlight style={styles.menuButton}>
-					<Menu {...this.props} />
-				</TouchableHighlight>
+				{/* <SearchBox {...this.props} /> */}
 
-				<TouchableOpacity
-					style={styles.buttonContainer}
-					onPress={() => this.props.navigation.navigate('CameraPic')}
-				>
-					<Text style={{ color: 'red', padding: 2 }}>REPORT A LITTER</Text>
-				</TouchableOpacity>
 				<ScrollView style={styles.mapContainer}>
 					<MapView
 						onRegionChangeComplete={(region) => {
@@ -69,6 +62,12 @@ class GoogleMapsScreen extends Component {
 						})}
 					</MapView>
 				</ScrollView>
+				<TouchableOpacity
+					style={styles.litterButton}
+					onPress={() => this.props.navigation.navigate('CameraPic')}
+				>
+					<Ionicons name="md-add-circle" size={60} color="skyblue" />
+				</TouchableOpacity>
 			</View>
 		);
 	}
@@ -77,62 +76,46 @@ class GoogleMapsScreen extends Component {
 export default GoogleMapsScreen;
 
 const styles = StyleSheet.create({
-	container       : {
-		flex : 1
-		/* backgroundColor : 'transparent' */
+	container    : {
+		flex            : 1,
+		backgroundColor : 'transparent'
 		/* justifyContent  : 'center',
 		alignItems      : 'center',
 		zIndex          : 9 */
 	},
-	mapContainer    : {
+	mapContainer : {
 		/* 	flex            : 1,
 		backgroundColor : '#fff',
 		justifyContent  : 'center',
 		alignItems      : 'center', */
 		zIndex : 1
 	},
-	mapStyle        : {
+	mapStyle     : {
 		width  : Dimensions.get('window').width,
 		height : Dimensions.get('window').height,
 		zIndex : -9
 	},
-	marker          : {
+	marker       : {
 		width  : 90,
 		height : 100
 	},
-	menuButton      : {
-		height         : 60,
-		/* position       : 'absolute', */
-		/* right          : 5, */
-		/* backgroundColor : 'gray', */
-		justifyContent : 'space-between',
-		justifyContent : 'flex-end',
-		alignItems     : 'flex-end',
-		margin         : 5
-	},
-	buttonContainer : {
+
+	litterButton : {
 		justifyContent  : 'center',
 		alignItems      : 'center',
-
-		width           : 300,
+		width           : 100,
 		margin          : 5,
-		borderRadius    : 50,
-		backgroundColor : '#FFFFFF',
-		height          : 50,
+		backgroundColor : 'transparent',
+		height          : 60,
 		position        : 'absolute',
-		/* flexDirection   : 'row', */
-		bottom          : 0,
-		justifyContent  : 'space-between',
-
-		/* padding         : 5, */
-		borderRadius    : 5,
+		bottom          : 10,
+		borderRadius    : 25,
 		borderWidth     : 1,
-		borderColor     : '#85c4ea',
-		maxHeight       : 100,
+		borderColor     : 'transparent',
 		alignSelf       : 'center',
 		zIndex          : 999
 	},
-	marker          : {
+	marker       : {
 		margin : 5
 	}
 });

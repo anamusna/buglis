@@ -15,12 +15,14 @@ import { Card, CardItem, Body, Header } from 'native-base';
 /* import { Card } from 'react-native-paper'; */
 
 export default class PostCard extends React.Component {
+	componentDidMount = async () => {
+		const data = this.props.post;
+		/* console.log('POSTS', data); */
+	};
 	render() {
-		console.log('CARD', this.props);
+		/* console.log('POST CARDss', this.props); */
 		return (
-			<TouchableWithoutFeedback
-			/* onPress={() => this.props.navigation.navigate('Profile', { id: post._id })} */
-			>
+			<TouchableWithoutFeedback>
 				<Card style={{ marginTop: 10, marginBottom: 10 }}>
 					<CardItem cardBody>
 						<View>
