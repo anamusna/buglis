@@ -14,6 +14,7 @@ import SignUpScreen from './src/screens/SignUp';
 import LoginScreen from './src/screens/Login';
 import SearchBox from './src/screens/SearchBox';
 import Logo from './src/screens/Logo';
+/* import { DrawerActions } from '@react-navigation/native'; */
 
 const postStack = createStackNavigator();
 const ProfileStack = createStackNavigator();
@@ -34,7 +35,7 @@ export function NavigationScreen(props) {
 export function ContentsScreen(props) {
 	console.disableYellowBox = true;
 	return (
-		<postStack.Navigator initialRouteName="Posts">
+		<postStack.Navigator initialRouteName="Login">
 			<postStack.Screen
 				name="Posts"
 				/* search={SearchBox} */

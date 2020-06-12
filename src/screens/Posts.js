@@ -19,7 +19,7 @@ import axios from 'axios';
 import { FileSystem } from 'expo';
 import { Card, CardItem, Body, Header } from 'native-base';
 import { getPosts } from '../../Redux/actions/postAction';
-import { api } from '../../api';
+import * as actions from '../../Redux/actions/userActions';
 import { AntDesign } from '@expo/vector-icons';
 
 YellowBox.ignoreWarnings([ 'Require cycle:' ]);
@@ -29,12 +29,12 @@ class PostScreen extends Component {
 		super(props);
 		this.state = {
 			posts        : [],
-
 			token        : '',
 			loading      : true,
 			userLoggedIn : false
 		};
 	}
+
 	LogoTitle = (navigation) => {
 		/* console.log('GGGGGGG profile', navigation); */
 
@@ -56,37 +56,65 @@ class PostScreen extends Component {
 		);
 	};
 
+	/* 	getData = async () => {
+		this.props.dispatchGetPosts();
+
+		try {
+			const token = await AsyncStorage.getItem('token');
+			console.log('POST msks TOKEN', token);
+			if (token !== null) {
+				console.log('XXXXXXXX  #####', token);
+			}
+		} catch (error) {
+			console.log('OOPS no token', error);
+		}
+	}; */
+
+	/* listener = this.props.navigation.addListener('didFocus', this.getData); */
+
 	componentDidMount = async () => {
-		await this.props.dispatchGetPosts();
+		this.props.dispatchGetPosts();
+
+		/* 		console.log('posts component', this.props.posts); */
 	};
 
+	/* 	componentWillUnmount = async () => {
+		this.listener.remove();
+	}; */
+
+	/* getData = () => {
+		this.props.dispatchGetPosts();
+		let token = AsyncStorage.getItem('token');
+		console.log('POST msks TOKEN', token);
+		this.setState({
+			token        : token,
+			userLoggedIn : true,
+			loading      : false
+		});
+	}; */
+
 	logout = async () => {
-		try {
-			await AsyncStorage.removeItem('id_token');
-			/* await AsyncStorage.removeItem('avatar'); */
-			this.setState({
-				token        : null,
-				userLoggedIn : false,
-				loading      : false
-			});
-			console.log('token removed');
-			this.props.navigation.navigate('Login');
-		} catch (err) {
-			console.log(`The error is: ${err}`);
-		}
+		const token = await AsyncStorage.removeItem('token');
+		console.log('LOGIN TOKEN remove XXX', token);
+		/* await AsyncStorage.removeItem('avatar'); */
+		console.log('token removed');
+		this.props.navigation.navigate('Login');
 	};
+
 	onAddPostPressed = (value) => {
 		this.setState({
 			posts : this.state.posts.concat(value)
 		});
 	};
 
-	/* 	onPressedPost = (id) => {
+	onPressedPost = (post) => {
+		/* 	console.log('ONE POST #########', post); */
+
 		this.props.navigation.navigate('Details', {
-			postId     : id,
-			otherParam : 'just somethings'
+			post : post
 		});
-	}; */
+	};
+
 	removePost = (id) => {
 		axios.delete('http://192.168.178.21:3001/api/posts/?id=' + id).then((res) => console.log(res));
 		this.setState({
@@ -94,20 +122,31 @@ class PostScreen extends Component {
 		});
 	};
 
+	/* 
+    removeItem(id) {
+        let newItems = this.state.items.slice();
+        newItems.splice(id, 1);
+        this.setState({
+            items: newItems
+        });
+    }
+       
+	*/
 	keyExtractor = (post, index) => post._id;
 	/* keyExtractor = (posts, index) => String(posts._id); */
 
 	renderItem = () => {
-		/* console.log('AKAKKA', this.keyExtractor) */ return (
+		return (
 			<View>
 				<View style={styles.addPost}>
 					<AddPosts />
-					<Button title="logout" onPress={() => this.logout()} />
+					<AntDesign name="logout" onPress={() => this.logout()} size={25} style={{ color: '#85c4ea' }} />
 				</View>
 				{/* <ScrollView> */}
 				<View styles={styles.container}>
 					<Text>POSTS</Text>
 					{this.props.posts.map((post, index) => {
+						/* console.log('POSTS', post); */
 						return (
 							<TouchableWithoutFeedback post={post} key={index} removePost={this.removePost}>
 								<Card style={styles.card}>
@@ -116,13 +155,16 @@ class PostScreen extends Component {
 											<Image
 												source={{
 													uri : post.image
-												}} /* require('../../assets/bug.jpg') */
+												}}
+												/* require('../../assets/bug.jpg') */
 												style={{ width: 350, height: 300 }}
 											/>
 										</View>
 									</CardItem>
 									<CardItem>
-										<Body /* style={{ justifyContent: 'center', alignItems: 'center' }} */>
+										<Body
+										/* style={{ justifyContent: 'center', alignItems: 'center' }} */
+										>
 											<Text style={{ fontSize: 20, fontWeight: 'bold' }}>{post.title}</Text>
 
 											<View style={{ flexDirection: 'row' }}>
@@ -130,9 +172,13 @@ class PostScreen extends Component {
 													<Text>{post.director}</Text>
 													<Text>{post.description}</Text>
 													<Text>{post.genre}</Text>
-													<Text onClick={() => this.props.removeEvent(this.props.posts._id)}>
+													<Button
+														title="go to details"
+														onPress={() => this.onPressedPost(post)}
+													/>
+													{/* <Text onClick={() => this.props.removeEvent(this.props.posts._id)}>
 														Delete
-													</Text>
+													</Text> */}
 													<Text>{post.updated_at}</Text>
 												</View>
 											</View>
@@ -148,6 +194,7 @@ class PostScreen extends Component {
 		);
 	};
 	render() {
+		/* console.log('AKAKKA', this.props); */
 		return (
 			<View style={styles.container}>
 				<FlatList

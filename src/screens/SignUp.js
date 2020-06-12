@@ -28,7 +28,7 @@ class SignUpScreen extends Component {
 	}
 	getUri = (uri) => {
 		console.log(uri);
-		this.setState({ avatar: uri });
+		/* this.setState({ avatar: uri }); */
 	};
 	onChangeValue = (key, value) => {
 		this.setState({ [key]: value });
@@ -58,7 +58,7 @@ class SignUpScreen extends Component {
 		const { user } = this.props;
 		console.log('USER component STATE', user);
 		/* 	this.setState({ user: this.props.user }); */
-		this.props.dispatchCreateUser();
+		/* this.props.dispatchCreateUser(); */
 	}
 
 	render() {

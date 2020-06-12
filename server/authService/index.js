@@ -7,19 +7,9 @@ const Session = require('../models/Session');
 
 const bcrypt = require('bcrypt');
 
-function verifyToken(token) {
+verifyToken = (token) => {
 	return jwt.verify(token, config.SECRET_TOKEN);
-}
-
-function createToken(person) {
-	let payload = {
-		sub : person._id,
-		iat : moment().unix(),
-		exp : moment().add(14, 'days').unix()
-	};
-
-	return jwt.encode(payload, config.SECRET_TOKEN);
-}
+};
 
 // userController.checkToken = (req, res) => {
 //   console.log(req.headers);
@@ -45,12 +35,12 @@ function createToken(person) {
 //   return null;
 // };
 
-function loginValidation(req, res) {
-	console.log('#####', req.headers.authorization, req.body.params, req.body);
+loginValidation = (req, res) => {
+	console.log('LOGIN VALIDATE #####', req.body);
 
-	if (req.body.email !== '' || req.body.email !== undefined) {
+	if (req.body.username !== '' || req.body.username !== undefined) {
 		try {
-			User.find({ email: req.body.email }, (err, registeredUsers) => {
+			User.find({ username: req.body.username }, (err, registeredUsers) => {
 				if (err) {
 					return res.send('OOPs Login Auth failed. Server error');
 				} else if (registeredUsers.length > 0) {
@@ -94,7 +84,7 @@ function loginValidation(req, res) {
 	} else {
 		res.send('Login failed. Make sure You fulfilled correctly all fields');
 	}
-}
+};
 
 module.exports = {
 	verifyToken,

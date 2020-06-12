@@ -6,6 +6,7 @@ import * as actions from '../../Redux/actions/userActions';
 import SearchBox from './SearchBox';
 import { ScrollView } from 'react-native-gesture-handler';
 import { AsyncStorage } from 'react-native';
+
 import {
 	StyleSheet,
 	Text,
@@ -18,7 +19,7 @@ import {
 	Button
 } from 'react-native';
 import { connect } from 'react-redux';
-import { LoginUser, getUser } from '../../Redux/actions/userActions';
+import { LoginUser, signOut } from '../../Redux/actions/userActions';
 import { AntDesign } from '@expo/vector-icons';
 
 class LoginScreen extends Component {
@@ -36,46 +37,43 @@ class LoginScreen extends Component {
 		this.setState({ [key]: value });
 	};
 
-	/* 	submitLogin = () => {
-		try {
-			let userData = JSON.stringify({
-				username : this.state.username,
-				password : this.state.password
-			});
-			console.log('USER Login STATE', userData);
-
-			this.props.dispatchLoginUser(userData);
-			console.log('USER STATE', userData);
-			this.setState({ user: userData });
-		} catch (error) {
-			console.log(error);
-		}
-		this.userAuth();
-	}; */
-
 	submitLogin = () => {
-		if (this.state.userLoggedIn === false) {
-			let userData = JSON.stringify({
-				username : this.state.username,
-				password : this.state.password
+		let data = JSON.stringify({
+			username : this.state.username,
+			password : this.state.password
+		});
+		if (this.state.username !== '') {
+			this.props.dispatchLoginUser(data);
+			this.setState({
+				userLoggedIn : true
 			});
-			console.log('USER STATE', userData);
-			return this.props.dispatchLoginUser(userData);
+			this.props.navigation.navigate('Posts');
+			console.log('USER STATE', data);
 		} else {
 			this.setState({
 				userLoggedIn : false,
-				errors       : 'Please, fill the inputs'
+				errors       : 'You are not registered'
 			});
+			console.log('You are not registered');
 		}
 	};
 
-	componentDidMount(user) {
-		console.log('USER LOGIN MOUNT', user);
-		this.props.dispatchLoginUser(user);
-	}
-
 	componentDidMount = async () => {
-		getUser();
+		const token = await AsyncStorage.getItem('token');
+		console.log('LOGIN TOKEN STATE XXX', token);
+		if (token !== null) {
+			this.setState({
+				token        : token,
+				userLoggedIn : true
+			});
+			this.props.navigation.navigate('Posts');
+		} else {
+			console.log('LOGIN component TOKEN STATE XXX', this.props.user.token);
+			this.setState({
+				token        : '',
+				userLoggedIn : false
+			});
+		}
 	};
 
 	render() {
@@ -164,7 +162,7 @@ class LoginScreen extends Component {
 }
 function mapStateToProps(state) {
 	const { user } = state;
-	console.log('LOGIN COMPONENT STATE', user);
+	/* 	console.log('LOGIN COMPONENT STATE', user); */
 	return {
 		user
 	};

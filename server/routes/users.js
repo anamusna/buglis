@@ -11,9 +11,11 @@ router.get('/user/list', cors(), userController.list);
 router.post('/user/signup', cors(), userController.create);
 
 //signin
-/* router.post('/user/signin', cors(), userController.check); */
+/* router.post('/user/signin', cors(), loginValidation); */
 router.post('/user/signin', cors(), userController.check);
 //show a user
+
+router.get('/user/show', cors(), userController.show);
 
 router.get('/user/:id', cors(), userController.show);
 
@@ -24,7 +26,7 @@ router.put('/user/:id', cors(), userController.update);
 //delete a user in the DB
 router.delete('/user/:id', cors(), userController.delete);
 
-router.get('/api/user/showDetails', cors(), userController.showDetails);
+/* router.get('/user/show', cors(), userController.show); */
 
 //upload an avatar image
 

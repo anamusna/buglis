@@ -26,7 +26,7 @@ export function getPosts() {
 		return axios
 			.get(`${api}${endpoint}`, config)
 			.then((response) => {
-				/* console.log('POST RES', response.data); */
+				/* 	console.log('POSTs RES', response.data); */
 				dispatch({
 					type    : GET_POSTS_SUCCESS,
 					payload : response.data
@@ -42,12 +42,14 @@ export function getPosts() {
 	};
 }
 
-export function getPost(_id) {
+export function getPost() {
+	/* console.log('ONE POST RES'); */
 	return (dispatch) => {
 		dispatch({ type: GET_POST });
 		axios
-			.get(`${api}${endpoint}/${_id}`, config)
+			.get(`${api}/${endpoint}`, config)
 			.then((response) => {
+				console.log('ONE POST RES', response.data);
 				dispatch({
 					type    : GET_POST_SUCCESS,
 					payload : response.data

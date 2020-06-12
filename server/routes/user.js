@@ -21,8 +21,8 @@ router.get('/api/user/showDetails', userController.showDetails);
 router.post('/api/user/save_avatar', userController.saveAvatar);
 
 //validate and login users
-/* router.post('/api/user/signin', cors(), userController.check); */
+/* router.post('/api/user/signin', loginValidation); */
 
-router.post('/api/user/signin', cors(), userController.check);
+/* router.post('/api/user/signin', cors(), userController.check); */
 
 module.exports = router;

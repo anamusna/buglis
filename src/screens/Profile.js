@@ -5,13 +5,16 @@ const config = require('../../config');
 import axios from 'axios';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import JWT from 'expo-jwt';
+
 import { MaterialIcons, AntDesign } from '@expo/vector-icons/';
 import AddPosts from './AddPosts';
+import { connect } from 'react-redux';
+import { getUser, signOut } from '../../Redux/actions/userActions';
 
 export const userID = () => {
 	console.log('yup', UserProfile);
 };
-export default class ProfileScreen extends React.Component {
+class ProfileScreen extends React.Component {
 	constructor() {
 		super();
 		this.state = {
@@ -22,40 +25,44 @@ export default class ProfileScreen extends React.Component {
 	}
 
 	logout = async () => {
-		try {
-			await AsyncStorage.removeItem('id_token');
-			/* await AsyncStorage.removeItem('avatar'); */
+		this.signOut;
+		this.props.navigation.navigate('Login');
+
+		/* try {
+			await AsyncStorage.removeItem('token');
+
 			this.setState({
 				token        : null,
 				userLoggedIn : false,
 				loading      : false
 			});
 			console.log('token removed');
-			this.props.navigation.navigate('Login');
+			this.props.navigation.navigate('Logi'n);
 		} catch (err) {
 			console.log(`The error is: ${err}`);
-		}
+		} */
 	};
 
 	componentDidMount = async () => {
-		const token = await AsyncStorage.getItem('id_token');
+		/* 	const token = await AsyncStorage.getItem('token');
+		const decodedJwt = JWT.encode(token, config.SECRET_TOKEN);
+		console.log('PROFILE vvv TOKENh', decodedJwt);
 
-		const id = token;
-		this.setState({ token: id });
-		await axios
-			.get(api + '/api/user/showDetails?id=' + id)
-			.then((response) => {
-				console.log('PROFILE TOKEN STATE XXX', response);
-				this.setState({
-					user : response.data
-				});
-			})
-			.catch((error) => {
-				console.log(error);
-			});
+		const decoded = JWT.decode(decodedJwt, config.SECRET_TOKEN);
+		console.log('###########ffffff', decoded);
+		const id = decoded; */
+		const id = '5ec07a4553df9269c448d4fc';
+
+		this.props.dispatchgetUser(id);
+		this.setState({
+			token : id,
+			user  : this.props.user
+		});
+		console.log('profile tokeb ###########', this.props.user, 'ID', id);
 	};
 
 	render() {
+		/* console.log('PROFILE  STATE XXX', this.props.user); */
 		return (
 			<ScrollView>
 				<View style={styles.main}>
@@ -63,8 +70,10 @@ export default class ProfileScreen extends React.Component {
 						<AddPosts />
 						<Button title="logout" onPress={() => this.logout()} />
 					</View>
-					{this.state.user.length > 0 ? (
+					{/* 	{this.state.user.length > 0 ? (
 						this.state.user.map((user, i) => (
+
+
 							<View
 								style={{
 									flexDirection  : 'column',
@@ -84,21 +93,20 @@ export default class ProfileScreen extends React.Component {
 										}}
 									/>
 								</View>
+
 								<View>
 									<Text
 										style={{
-											fontFamily : 'Roboto-Black',
-											fontSize   : 22,
-											padding    : 3
+											fontSize : 22,
+											padding  : 3
 										}}
 									>
 										{user.first_name}
 									</Text>
 									<Text
 										style={{
-											fontFamily : 'Roboto-Medium',
-											fontSize   : 14,
-											padding    : 3
+											fontSize : 14,
+											padding  : 3
 										}}
 									>
 										{user.name}
@@ -107,14 +115,28 @@ export default class ProfileScreen extends React.Component {
 									<Text>{user.username}</Text>
 								</View>
 							</View>
+
+
+
 						))
-					) : null}
+					) : null} */}
 				</View>
 			</ScrollView>
 		);
 	}
 }
+function mapStateToProps(state) {
+	const { user } = state;
+	/* console.log('Profile COMPONENT STATE', user); */
+	return {
+		user
+	};
+}
+const mapDispatchToProps = {
+	dispatchgetUser : getUser
+};
 
+export default connect(mapStateToProps, mapDispatchToProps)(ProfileScreen);
 const styles = StyleSheet.create({
 	main            : {
 		margin       : 10,
@@ -123,10 +145,9 @@ const styles = StyleSheet.create({
 		borderWidth  : 2
 	},
 	infoText        : {
-		fontFamily : 'Roboto-Light',
-		textAlign  : 'left',
-		color      : '#0ec485',
-		fontSize   : 16
+		textAlign : 'left',
+		color     : '#0ec485',
+		fontSize  : 16
 	},
 	buttons         : {
 		flexDirection : 'row',

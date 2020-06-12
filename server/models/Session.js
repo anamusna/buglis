@@ -1,19 +1,14 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const SessionSchema = mongoose.Schema({
-	user_id : {
-		type : mongoose.Schema.ObjectId
-	},
-	token   : {
-		type : {
-			type : String
-		}
-	},
-	userId  : {
+const SessionSchema = new mongoose.Schema({
+	token  : {
 		type : String
 	},
-	date    : {
+	userId : {
+		type : String
+	},
+	date   : {
 		type    : Date,
 		default : Date.now
 	}

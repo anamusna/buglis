@@ -9,7 +9,7 @@ import {
 	GET_ALL_USERS,
 	GET_USER,
 	GET_USER_SUCCESS,
-	GET_USER_FAILURE,
+	GET_USER_FAILED,
 	SET_USERNAME,
 	SET_PASSWORD,
 	SAVE_LOGGED_IN_USER
@@ -44,40 +44,59 @@ export default (state = initialState, action) => {
 			};
 
 		case LOGIN:
+			return { ...state, error: null };
+
+		case LOGIN_SUCCESS:
 			return {
-				...state,
 				user         : action.payload,
 				userLoggedIn : true,
 				error        : null
 			};
-
-		case LOGIN_SUCCESS:
+		case SAVE_LOGGED_IN_USER:
 			return {
-				...state,
-				user         : action.payload,
+				token        : action.payload,
 				userLoggedIn : true,
 				error        : null
 			};
 		case LOGIN_FAILED:
 			return {
-				...state,
 				userLoggedIn : false,
 				error        : action.payload
 			};
 		case GET_USER:
-			return { ...state, error: null };
+			return { userLoggedIn: true, user: action.payload, error: null };
 
 		case GET_USER_SUCCESS:
-			return { ...state, userLoggedIn: true, user: action.payload, error: null };
+			return { userLoggedIn: true, token: action.payload, error: null };
 
-		case GET_USER_FAILURE:
-			return { ...state, userLoggedIn: false, error: action.payload };
+		case GET_USER_FAILED:
+			return { userLoggedIn: false, error: action.payload };
 		case LOGOUT:
 			return {
-				...state,
-				user : {}
+				...state
 			};
 		default:
 			return state;
 	}
 };
+
+/* export default (state = initialState, action) => {
+	switch (action.type) {
+	  case 'SAVE_USER':
+		if (action.user.sessionId) {
+		  AsyncStorage.setItem('sessionId', action.user.sessionId);
+		}
+		if (action.user.id) {
+		  AsyncStorage.setItem('userId', action.user.id);
+		}
+		return {
+		  ...state,
+		  id: action.user.id || state.id,
+		  sessionId: action.user.sessionId || state.sessionId,
+		  username: action.user.username || state.username,
+		  password: action.user.password || state.password
+		});
+	  default:
+		return state;
+	}
+  }; */

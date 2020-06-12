@@ -35,6 +35,9 @@ class AddPosts extends Component {
 		this.setState({ modalVisible: visible });
 	}
 
+	/* 	onChange = (e) => {
+		this.setState({ [e.target.name]: e.target.value });
+	}; */
 	onChangeValue = (key, value) => {
 		/* console.log('GGGG', key, value); */
 		this.setState({ [key]: value });
@@ -63,12 +66,13 @@ class AddPosts extends Component {
 		formData.append('rating', this.state.rating);
 		const config = {
 			headers : {
+				Accept         : 'application/json',
 				'content-type' : 'multipart/form-data'
 			}
 		};
 
 		axios
-			.post('http://192.168.178.36:3001/api/posts/new', formData, config)
+			.post('http://192.168.178.21:3001/api/posts/new', formData, config)
 			.then((response) => {
 				console.log('add post', response);
 				if (response) {
@@ -167,6 +171,26 @@ class AddPosts extends Component {
 										<Text>add a photo</Text>
 									</TouchableHighlight>
 								</View>
+
+								{/* 		<TextInput
+									required
+									type="file"
+									name="image"
+									placeholder="url of your image"
+									placeholderStyle={{ paddingLeft: 10 }}
+									multiline={true}
+									underlineColorAndroid="transparent"
+									style={[ styles.textInput ]}
+									keyboardType="image"
+									underlineColorAndroid="transparent"
+									underlineColorAndroid="transparent"
+									autoCapitalize="none"
+									value={this.state.image}
+									name="image"
+									onChange={this.onChangeImage}
+
+									
+								/> */}
 								<TouchableHighlight style={styles.submitButton} onPress={() => this.onFormSubmit()}>
 									<Text style={{ color: 'white' }}>Submit</Text>
 								</TouchableHighlight>
